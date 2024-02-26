@@ -81,3 +81,16 @@ class TestLibraryDBInterface(unittest.TestCase):
         self.interface.db.search = Mock(return_value=None)
         result = self.interface.retrieve_patron('')
         self.assertEqual(None, result, 'found no patron but failed to return None')
+
+    def test_convert_patron_to_db_format(self):
+        patron = Mock()
+        patron.get_fname = Mock(return_value='testf')
+        patron.get_lname = Mock(return_value='testl')
+        patron.get_age = Mock(return_value=22)
+        patron.get_memberID = Mock(return_value='abc123')
+        patron.get_borrowed_books = Mock(return_value=['testbook'])
+
+        result = self.interface.convert_patron_to_db_format(patron)
+        mock_patron_dict = {'fname': 'testf', 'lname': 'testl', 'age': 22, 'memberID': 'abc123', 'borrowed_books': ['testbook']}
+        self.assertEqual(mock_patron_dict, result)
+
