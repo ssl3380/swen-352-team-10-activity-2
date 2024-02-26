@@ -12,7 +12,7 @@ class Books_API:
     API_URL = "http://openlibrary.org/search.json"
 
     def make_request(self, url):
-        """Makes an HTTP request to the given URL.
+        """Makes a HTTP request to the given URL.
         
         :param url: the url used for the HTTP request
         :returns: the JSON body of the request, None if non 200 status code or ConnectionError
