@@ -6,6 +6,7 @@ class TestLibraryDBInterface(unittest.TestCase):
 
     def setUp(self):
         self.interface = Library_DB()
+        self.interface.db = Mock()
 
     def test_close_db(self):
         self.interface.db.close = Mock()
