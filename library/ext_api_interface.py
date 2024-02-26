@@ -5,7 +5,6 @@ Description: module used for interacting with a web service
 
 import requests
 
-
 class Books_API:
     """Class used for interacting with the OpenLibrary API."""
 
