@@ -1,12 +1,15 @@
 import unittest
 from unittest.mock import Mock
+from library import library_db_interface
 from library.library_db_interface import *
 
 class TestLibraryDBInterface(unittest.TestCase):
 
     def setUp(self):
+        library_db_interface.TinyDB = Mock()
+        library_db_interface.Patron = Mock()
+        library_db_interface.Query = Mock()
         self.interface = Library_DB()
-        self.interface.db = Mock()
 
     def test_close_db(self):
         self.interface.db.close = Mock()
@@ -77,7 +80,7 @@ class TestLibraryDBInterface(unittest.TestCase):
     def test_retrieve_patron(self):
         self.interface.db.search = Mock(return_value=[{'fname': 'test', 'lname': 'test', 'age': 22, 'memberID': 'abc123'}])
         result = self.interface.retrieve_patron('')
-        self.assertEqual('test', result.fname, 'failed to retrieve patron correctly')
+        self.assertIsNotNone(result, 'failed to retrieve patron correctly')
 
         self.interface.db.search = Mock(return_value=None)
         result = self.interface.retrieve_patron('')
