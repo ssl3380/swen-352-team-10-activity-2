@@ -5,13 +5,14 @@ Description: module used for interacting with a web service
 
 import requests
 
+
 class Books_API:
     """Class used for interacting with the OpenLibrary API."""
 
     API_URL = "http://openlibrary.org/search.json"
 
     def make_request(self, url):
-        """Makes a HTTP request to the given URL.
+        """Makes an HTTP request to the given URL.
         
         :param url: the url used for the HTTP request
         :returns: the JSON body of the request, None if non 200 status code or ConnectionError
