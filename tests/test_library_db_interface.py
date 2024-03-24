@@ -11,6 +11,10 @@ class TestLibraryDBInterface(unittest.TestCase):
         library_db_interface.Query = Mock()
         self.interface = Library_DB()
 
+    def test_constructor(self):
+        self.assertIsNotNone(self.interface.DATABASE_FILE, 'db file pointing to None')
+        self.assertEqual('db.json', self.interface.DATABASE_FILE, 'pulling incorrect db file')
+
     def test_close_db(self):
         self.interface.db.close = Mock()
         self.interface.close_db()
@@ -75,15 +79,17 @@ class TestLibraryDBInterface(unittest.TestCase):
         result = self.interface.update_patron(patron)
 
         self.interface.convert_patron_to_db_format.assert_called_once_with(patron)
-        self.interface.db.update.assert_called_once()
+        self.interface.db.update.assert_called_once_with({'test': 'test'}, False)
 
     def test_retrieve_patron(self):
         self.interface.db.search = Mock(return_value=[{'fname': 'test', 'lname': 'test', 'age': 22, 'memberID': 'abc123'}])
         result = self.interface.retrieve_patron('')
+        self.interface.db.search.assert_called_once_with(False)
         self.assertIsNotNone(result, 'failed to retrieve patron correctly')
 
         self.interface.db.search = Mock(return_value=None)
         result = self.interface.retrieve_patron('')
+        self.interface.db.search.assert_called_once_with(False)
         self.assertEqual(None, result, 'found no patron but failed to return None')
 
     def test_convert_patron_to_db_format(self):

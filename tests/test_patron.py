@@ -13,8 +13,12 @@ class TestPatron(unittest.TestCase):
         self.assertEqual('abc123', self.patron.memberID, 'memberID not constructed correctly')
 
     def test_bad_constructor(self):
-        self.assertRaises(InvalidNameException, Patron, "bad_first1", 'safe_last', 22, 'abc123')
-        self.assertRaises(InvalidNameException, Patron, "safe_firsts", 'bad_last1', 22, 'abc123')
+        with self.assertRaises(InvalidNameException) as e:
+            Patron('bad_first1', 'safe_last', 22, 'abc123')
+        self.assertEqual('Name should not contain numbers', str(e.exception))
+        with self.assertRaises(InvalidNameException) as e:
+            Patron('safe_first', 'bad_last1', 22, 'abc123')
+        self.assertEqual('Name should not contain numbers', str(e.exception))
 
     def test_add_borrowed_book(self):
         self.patron.add_borrowed_book('test book')
