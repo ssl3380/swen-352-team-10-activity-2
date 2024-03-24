@@ -1,6 +1,7 @@
 import unittest
 from unittest.mock import Mock
 from library import library
+from library import patron
 import json
 
 class TestLibrary(unittest.TestCase):
@@ -20,6 +21,10 @@ class TestLibrary(unittest.TestCase):
     def test_is_ebook_true(self):
         self.lib.api.get_ebooks = Mock(return_value=self.books_data)
         self.assertTrue(self.lib.is_ebook('learning python'))
+
+    def test_is_ebook_false(self):
+        self.lib.api.get_ebooks = Mock(return_value=self.books_data)
+        self.assertFalse(self.lib.is_ebook('not learning python'))
 
     def test_get_ebooks_count(self):
         self.lib.api.get_ebooks = Mock(return_value=self.books_data)
@@ -41,9 +46,19 @@ class TestLibrary(unittest.TestCase):
         self.lib.db.insert_patron = Mock(return_value=2)
         self.assertEqual(self.lib.register_patron('John', 'Smith', '24', '2'), 2)
 
+    def test_register_patron_with_patron(self):
+        patron_obj = patron.Patron('John', 'Smith', '24', '2')
+        self.lib.db.insert_patron = Mock(return_value=2)
+        self.assertEqual(self.lib.register_patron('John', 'Smith', '24', '2'), 2)
+        self.lib.db.insert_patron.assert_called_with(patron_obj)
+
     def test_is_patron_registered(self):
         self.lib.db.retrieve_patron = Mock(return_value=library.patron)
         self.assertTrue(self.lib.is_patron_registered(library.patron))
+
+    def test_is_patron_registered(self):
+        self.lib.db.retrieve_patron = Mock(return_value=None)
+        self.assertFalse(self.lib.is_patron_registered(library.patron))
 
     def test_borrow_book(self):
         self.lib.borrow_book('learning python', library.patron)
