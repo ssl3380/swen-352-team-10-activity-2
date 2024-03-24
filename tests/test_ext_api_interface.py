@@ -56,7 +56,7 @@ class TestBooksAPI(unittest.TestCase):
         self.assertEqual(self.api.is_book_available(self.book), True)
         self.api.make_request.assert_called_with(request_url)
 
-        json_data_book_found_edge_case = {"numFound": 5, "start": 0, "numFoundExact": True, "docs": [
+        json_data_book_found_one_book = {"numFound": 5, "start": 0, "numFoundExact": True, "docs": [
             {"key": "/works/OL28380841W", "type": "work",
              "seed": ["/books/OL49530107M", "/books/OL38858312M", "/works/OL28380841W",
                       "/subjects/go_(computer_program_language)",
@@ -78,7 +78,7 @@ class TestBooksAPI(unittest.TestCase):
              "subject_key": ["concurrent_aggregates_(computer_program_language)", "go_(computer_program_language)"]}],
                                           "num_found": 0, "q": self.book_dne,
                                           "offset": None}
-        self.api.make_request = Mock(return_value=json_data_book_found_edge_case)
+        self.api.make_request = Mock(return_value=json_data_book_found_one_book)
         self.assertEqual(self.api.is_book_available(self.book), True)
 
     def test_books_by_author(self):
